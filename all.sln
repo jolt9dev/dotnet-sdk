@@ -7,6 +7,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "bcl", "bcl", "{1577D06C-2BB
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Jolt9.Core", "bcl\Core\Jolt9.Core.csproj", "{FD2E9B70-BAE7-4A65-9FAD-223E2D184155}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Jolt9.Bcl.Tests", "bcl\Bcl.Tests\Jolt9.Bcl.Tests.csproj", "{245AD1C6-5B6F-4C96-897F-C8AA4E7EC235}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -20,8 +22,13 @@ Global
 		{FD2E9B70-BAE7-4A65-9FAD-223E2D184155}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FD2E9B70-BAE7-4A65-9FAD-223E2D184155}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FD2E9B70-BAE7-4A65-9FAD-223E2D184155}.Release|Any CPU.Build.0 = Release|Any CPU
+		{245AD1C6-5B6F-4C96-897F-C8AA4E7EC235}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{245AD1C6-5B6F-4C96-897F-C8AA4E7EC235}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{245AD1C6-5B6F-4C96-897F-C8AA4E7EC235}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{245AD1C6-5B6F-4C96-897F-C8AA4E7EC235}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{FD2E9B70-BAE7-4A65-9FAD-223E2D184155} = {1577D06C-2BBF-42DD-8396-7769DA9EAFFD}
+		{245AD1C6-5B6F-4C96-897F-C8AA4E7EC235} = {1577D06C-2BBF-42DD-8396-7769DA9EAFFD}
 	EndGlobalSection
 EndGlobal
