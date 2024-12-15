@@ -373,6 +373,9 @@ dotnet_naming_style.s_camelcase.capitalization = camel_case
 
 dotnet_code_quality.enable_platform_analyzer_on_pre_net5_target = true
 
+# C# analyzer rules
+dotnet_diagnostic.CS1591.severity = none # allow missing xml comments
+
 # analyzer rules
 dotnet_diagnostic.IDE0045.severity = none # if statement can be simplified should be ignored
 dotnet_diagnostic.IDE0057.severity = none # substring can be simplified is invalide for .NET STANDARD

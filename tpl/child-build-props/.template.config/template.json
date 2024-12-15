@@ -1,0 +1,11 @@
+{
+    "$schema": "http://json.schemastore.org/template",
+    "author": "jolt9dev",
+    "classifications": [ "Jolt9", "MSBuild", "props" ], 
+    "name": "MSBuild Child Directory.Build.props file",
+    "identity": "Jolt9.MSBuild.ChildBuildProps",         
+    "shortName": "childbuildprops",                    
+    "tags": {                         
+      "type":"item"
+    }
+}
