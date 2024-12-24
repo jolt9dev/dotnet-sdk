@@ -1,5 +1,4 @@
-
-namespace Jolt9.Options; 
+namespace Jolt9;
 
 public interface IOption
 {
@@ -23,8 +22,8 @@ public interface IOption<T> : IOption, IEquatable<IOption<T>>
     T UnwrapOr(Func<T> defaultValueFactory);
 }
 
-internal enum OptionState : byte 
+internal enum OptionState : byte
 {
     None = 0,
-    Some = 1
+    Some = 1,
 }

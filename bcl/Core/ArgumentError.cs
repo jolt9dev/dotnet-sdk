@@ -1,8 +1,7 @@
-
 using System.Runtime.CompilerServices;
 using System.Text.Json.Serialization;
 
-namespace Jolt9.Errors;
+namespace Jolt9;
 
 public class ArgumentError : ExceptionError, IArgumentError
 {
@@ -12,7 +11,7 @@ public class ArgumentError : ExceptionError, IArgumentError
         this.ArgumentName = string.Empty;
         this.Code = "ArgumentError";
     }
- 
+
     public ArgumentError(string argumentName, string? message = null, IInnerError? inner = null)
         : base(message ?? $"Argument {argumentName} is invalid", inner)
     {
@@ -27,6 +26,9 @@ public class ArgumentError : ExceptionError, IArgumentError
         this.Code = "ArgumentError";
     }
 
+    [JsonPropertyName("argument")]
+    public string ArgumentName { get; set; }
+
     public new ExceptionError TrackCallerInfo(
         [CallerLineNumber] int line = 0,
         [CallerFilePath] string file = "",
@@ -38,10 +40,6 @@ public class ArgumentError : ExceptionError, IArgumentError
         return this;
     }
 
-
-    [JsonPropertyName("argument")]
-    public string ArgumentName { get; set; }
-
     public override Exception ToException()
     {
         this.Exception ??= new ArgumentException(this.Message, this.ArgumentName);
@@ -49,7 +47,6 @@ public class ArgumentError : ExceptionError, IArgumentError
         return this.Exception;
     }
 }
-
 
 public class ArgumentNullError : ArgumentError
 {
@@ -59,7 +56,7 @@ public class ArgumentNullError : ArgumentError
         this.ArgumentName = string.Empty;
         this.Code = "ArgumentNullError";
     }
- 
+
     public ArgumentNullError(string argumentName, string? message = null, IInnerError? inner = null)
         : base(argumentName, message ?? $"Argument {argumentName} is null.", inner)
     {
@@ -115,7 +112,7 @@ public class ArgumentOutOfRangeError : ArgumentError
         this.Code = "ArgumentRangeError";
     }
 
-     public ArgumentOutOfRangeError(string argumentName, string? message)
+    public ArgumentOutOfRangeError(string argumentName, string? message)
         : this(argumentName, null, message, null)
     {
         this.ArgumentName = argumentName;
@@ -128,7 +125,7 @@ public class ArgumentOutOfRangeError : ArgumentError
         this.ArgumentName = argumentName;
         this.Code = "ArgumentRangeError";
     }
- 
+
     public ArgumentOutOfRangeError(string argumentName, object? value, string? message, IInnerError? inner)
         : base(argumentName, message ?? $"Argument {argumentName} with is out of range.", inner)
     {

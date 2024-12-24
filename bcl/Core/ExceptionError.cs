@@ -3,7 +3,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Runtime.CompilerServices;
 using System.Text.Json.Serialization;
 
-namespace Jolt9.Errors;
+namespace Jolt9;
 
 public class ExceptionError : Error
 {
@@ -31,6 +31,7 @@ public class ExceptionError : Error
             return;
 
         var e = ex.GetType().Name;
+
         // Remove the "Exception" suffix
         this.Code = e.Replace("Exception", "Error");
     }
@@ -45,7 +46,6 @@ public class ExceptionError : Error
         this.FilePath = file;
         return this;
     }
-
 
     [JsonIgnore]
 

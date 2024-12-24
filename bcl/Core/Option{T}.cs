@@ -1,7 +1,7 @@
-namespace Jolt9.Options;
+namespace Jolt9;
 
 public class Option<T> : IOption<T>,
-    IEquatable<Option<T>>, 
+    IEquatable<Option<T>>,
     IEquatable<T>
     where T : notnull
 {
@@ -12,7 +12,7 @@ public class Option<T> : IOption<T>,
     public Option(T value)
     {
         this.value = value;
-        this.state = value is ValueTuple or DBNull ? OptionState.None : OptionState.Some; 
+        this.state = value is ValueTuple or DBNull ? OptionState.None : OptionState.Some;
     }
 
     public Option()
@@ -20,18 +20,21 @@ public class Option<T> : IOption<T>,
         this.value = default;
         this.state = OptionState.None;
     }
-    public bool IsSome => state == OptionState.Some;
 
-    public bool IsNone => state == OptionState.None;
+    public static Option<T> None { get; } = new();
+
+    public bool IsSome => this.state == OptionState.Some;
+
+    public bool IsNone => this.state == OptionState.None;
 
     public T Value
     {
         get
         {
-            if (state == OptionState.None)
+            if (this.state == OptionState.None)
                 throw new InvalidOperationException("Option is None");
 
-            return value!;
+            return this.value!;
         }
     }
 
@@ -44,13 +47,14 @@ public class Option<T> : IOption<T>,
     public static implicit operator Option<T>(ValueTuple value)
         => new();
 
+    public static implicit operator ValueOption<T>(Option<T> option)
+        => option.IsSome ? new(option.Value) : ValueOption<T>.None;
+
     public static implicit operator ValueTask<Option<T>>(Option<T> option)
         => new(option);
 
     public static implicit operator Task<Option<T>>(Option<T> option)
         => Task.FromResult(option);
-
-    public static Option<T> None { get; } = new();
 
     public static Option<T> Some(T value) => new(value);
 
@@ -59,27 +63,32 @@ public class Option<T> : IOption<T>,
 
     public Option<U> And<U>(Option<U> other)
         where U : notnull
-        => state == OptionState.Some ? other : new();
+        => this.state == OptionState.Some ? other : new();
 
     public Option<U> And<U>(Func<Option<U>> otherFactory)
         where U : notnull
-        => state == OptionState.Some ? otherFactory() : new();
+        => this.state == OptionState.Some ? otherFactory() : new();
 
     public Option<T> Or(Option<T> other)
-        => state == OptionState.Some ? this : other;
+        => this.state == OptionState.Some ? this : other;
 
     public Option<T> Or(T other)
-        => state == OptionState.Some ? this : new(other);
+        => this.state == OptionState.Some ? this : new(other);
 
     public Option<T> Or(Func<Option<T>> otherFactory)
-        => state == OptionState.Some ? this : otherFactory();
+        => this.state == OptionState.Some ? this : otherFactory();
+
+    public override int GetHashCode()
+    {
+        return HashCode.Combine(this.state, this.value);
+    }
 
     public bool Equals(IOption<T>? other)
     {
         if (other is null)
-            return state == OptionState.None;
+            return this.state == OptionState.None;
 
-        if (state != OptionState.Some)
+        if (this.state != OptionState.Some)
             return other.IsNone;
 
         return this.value!.Equals(other.Value);
@@ -91,9 +100,9 @@ public class Option<T> : IOption<T>,
             return true;
 
         if (other is null)
-            return state == OptionState.None;
+            return this.state == OptionState.None;
 
-        if (state != OptionState.Some)
+        if (this.state != OptionState.Some)
             return other.state == OptionState.None;
 
         return this.value!.Equals(other.value);
@@ -101,15 +110,29 @@ public class Option<T> : IOption<T>,
 
     public bool Equals(T? other)
     {
-        if (state != OptionState.Some)
+        if (this.state != OptionState.Some)
             return other is null;
 
         return this.value!.Equals(other);
     }
 
+    public override bool Equals(object? obj)
+    {
+        if (obj is Option<T> other)
+            return this.Equals(other);
+
+        if (obj is T otherValue)
+            return this.Equals(otherValue);
+
+        if (obj is IOption<T> otherOption)
+            return this.Equals(otherOption);
+
+        return false;
+    }
+
     public T Expect(string message)
     {
-        if (state == OptionState.None)
+        if (this.state == OptionState.None)
             throw new OptionException(message).TrackCallerInfo();
 
         return this.value!;
@@ -117,7 +140,7 @@ public class Option<T> : IOption<T>,
 
     public T Expect(Exception ex)
     {
-        if (state == OptionState.None)
+        if (this.state == OptionState.None)
             throw ex;
 
         return this.value!;
@@ -125,17 +148,17 @@ public class Option<T> : IOption<T>,
 
     public Option<U> Map<U>(Func<T, U> mapper)
         where U : notnull
-        => state == OptionState.Some ? new(mapper(this.value!)) : new();
+        => this.state == OptionState.Some ? new(mapper(this.value!)) : new();
 
     public U MapOr<U>(Func<T, U> mapper, U defaultValue)
-        => state == OptionState.Some ? mapper(this.value!) : defaultValue;
+        => this.state == OptionState.Some ? mapper(this.value!) : defaultValue;
 
     public U MapOr<U>(Func<T, U> mapper, Func<U> defaultValueFactory)
-        => state == OptionState.Some ? mapper(this.value!) : defaultValueFactory();
+        => this.state == OptionState.Some ? mapper(this.value!) : defaultValueFactory();
 
     public Option<T> Inspect(Action<T> action)
     {
-        if (state == OptionState.Some)
+        if (this.state == OptionState.Some)
             action(this.value!);
 
         return this;
@@ -143,7 +166,7 @@ public class Option<T> : IOption<T>,
 
     public bool Test(Func<T, bool> predicate)
     {
-        if (state == OptionState.None)
+        if (this.state == OptionState.None)
             return false;
 
         return predicate(this.value!);
@@ -151,7 +174,7 @@ public class Option<T> : IOption<T>,
 
     public bool TestNone(Func<bool> predicate)
     {
-        if (state == OptionState.Some)
+        if (this.state == OptionState.Some)
             return false;
 
         return predicate();
@@ -159,26 +182,25 @@ public class Option<T> : IOption<T>,
 
     object IOption.Unwrap()
     {
-        if (state == OptionState.None)
+        if (this.state == OptionState.None)
             throw new InvalidOperationException("Option is None");
 
-        return value!;
+        return this.value!;
     }
-
 
     public T Unwrap()
     {
-        if (state == OptionState.None)
+        if (this.state == OptionState.None)
             throw new InvalidOperationException("Option is None");
 
-        return value!;
+        return this.value!;
     }
 
     public T UnwrapOr(T defaultValue)
-        => state == OptionState.Some ? value! : defaultValue;
+        => this.state == OptionState.Some ? this.value! : defaultValue;
 
     public T UnwrapOr(Func<T> defaultValueFactory)
-        => state == OptionState.Some ? value! : defaultValueFactory();
+        => this.state == OptionState.Some ? this.value! : defaultValueFactory();
 
     public Option<T> Xor(Option<T> other)
     {

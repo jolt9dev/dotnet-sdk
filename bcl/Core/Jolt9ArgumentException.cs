@@ -7,6 +7,26 @@ namespace Jolt9;
 #endif
 public class Jolt9ArgumentException : ArgumentException
 {
+    public Jolt9ArgumentException()
+    {
+        this.TraceId = Activity.Current?.Id ?? string.Empty;
+    }
+
+    public Jolt9ArgumentException(string argumentName, string? message = null, System.Exception? inner = null)
+        : base(message ?? $"Argument ${argumentName}", argumentName, inner)
+    {
+        this.TraceId = Activity.Current?.Id ?? string.Empty;
+    }
+
+    #if NETLEGACY
+    protected Jolt9ArgumentException(
+        System.Runtime.Serialization.SerializationInfo info,
+        System.Runtime.Serialization.StreamingContext context)
+        : base(info, context)
+    {
+    }
+#endif
+
     public virtual string Code => "ArgumentException";
 
     public virtual string TraceId { get; set; } = string.Empty;
@@ -16,26 +36,6 @@ public class Jolt9ArgumentException : ArgumentException
     public virtual int LineNumber { get; protected set; }
 
     public virtual string FilePath { get; protected set; } = string.Empty;
-
-    public Jolt9ArgumentException() 
-    {
-        this.TraceId = Activity.Current?.Id ?? string.Empty;
-    }
-
-    public Jolt9ArgumentException(string argumentName, string? message = null, System.Exception? inner = null) 
-        : base(message ?? $"Argument ${argumentName}", argumentName, inner)
-    {
-        this.TraceId = Activity.Current?.Id ?? string.Empty;
-    }
-
-    #if NETLEGACY
-    protected Jolt9ArgumentException(
-        System.Runtime.Serialization.SerializationInfo info,
-        System.Runtime.Serialization.StreamingContext context) 
-        : base(info, context) 
-    {
-    }
-#endif
 
     public ArgumentException TrackCallerInfo(
         [System.Runtime.CompilerServices.CallerLineNumber] int line = 0,
@@ -48,4 +48,3 @@ public class Jolt9ArgumentException : ArgumentException
         return this;
     }
 }
-

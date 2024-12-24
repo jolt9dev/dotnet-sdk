@@ -1,7 +1,6 @@
-
 using System.Runtime.CompilerServices;
 
-namespace Jolt9.Errors;
+namespace Jolt9;
 
 public class AggregateError : ExceptionError
 {

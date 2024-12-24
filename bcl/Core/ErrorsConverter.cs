@@ -1,8 +1,8 @@
-namespace Jolt9.Errors;
+namespace Jolt9;
 
 public static class ErrorsConverter
 {
-    private static readonly List<IErrorConverter> s_converters =[new DefaultErrorConverter()];
+    private static readonly List<IErrorConverter> s_converters = [new DefaultErrorConverter()];
 
     public static void PrependConverter(string name, Func<Exception, bool> canConvert,  Func<Exception, Error> convert)
     {
@@ -34,7 +34,6 @@ public static class ErrorsConverter
 
         return new ExceptionError(ex);
     }
-
 }
 
 public interface IErrorConverter
@@ -52,7 +51,7 @@ public class DelegateErrorConverter : IErrorConverter
 
     private readonly Func<Exception, Error> converter;
 
-    private readonly Func<Exception, bool> canConvert;   
+    private readonly Func<Exception, bool> canConvert;
 
     public DelegateErrorConverter(string name, Func<Exception, bool> canConvert, Func<Exception, Error> converter)
     {
@@ -61,7 +60,7 @@ public class DelegateErrorConverter : IErrorConverter
         this.converter = converter;
     }
 
-     public bool CanConvert(Exception ex)
+    public bool CanConvert(Exception ex)
         => this.canConvert(ex);
 
     public Error Convert(Exception ex)

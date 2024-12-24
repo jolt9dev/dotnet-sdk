@@ -1,10 +1,8 @@
-namespace Jolt9.Errors;
+namespace Jolt9;
 
 public interface IError : IInnerError
 {
 }
-
-
 
 public interface IInnerError
 {
@@ -12,7 +10,7 @@ public interface IInnerError
 
     public string Code { get; }
 
-    public string? TraceId { get;}
+    public string? TraceId { get; }
 
     public IInnerError? InnerError { get; }
 }
