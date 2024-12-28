@@ -49,6 +49,9 @@ public readonly struct ValueResult<T> : IResult<T, Error>,
     public static implicit operator ValueResult<T>(Error error)
         => new(default!, error, false);
 
+    public static implicit operator ValueResult<T>(Exception exception)
+        => new(default!, exception, false);
+
     public static implicit operator T(ValueResult<T> result)
         => result.Value;
 

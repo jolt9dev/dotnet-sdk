@@ -34,4 +34,9 @@
     <PackageReference Include="Microsoft.Bcl.HashCode" />
     <PackageReference Include="System.Diagnostics.DiagnosticSource" />
   </ItemGroup>
+
+  <ItemGroup>
+    <Compile Include="$(CommonDir)/Interop/Windows/NtDll/RtlGetVersion.cs" Link="Interop/Windows/NtDll/RtlGetVersion.cs" />
+    <Compile Include="$(CommonDir)/Interop/Windows/Libraries.cs" Link="Interop/Windows/Library.cs" />
+  </ItemGroup>  
 </Project>

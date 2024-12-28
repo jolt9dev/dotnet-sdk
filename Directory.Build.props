@@ -35,7 +35,7 @@
     <Linux>false</Linux>
     <MacOs>false</MacOs>
     <RootDir>$(MSBuildThisFileDirectory.TrimEnd("/"))</RootDir>
-    <CommonDir>$(MSBuildThisFileDirectory)common</CommonDir>
+    <CommonDir>$(MSBuildThisFileDirectory)cmn</CommonDir>
     <AssetsDir>$(MSBuildThisFileDirectory)assets</AssetsDir>
     <!-- <IconPath>$(MSBuildThisFileDirectory)assets/icon.png</IconPath> -->
     <NetLegacy>false</NetLegacy>

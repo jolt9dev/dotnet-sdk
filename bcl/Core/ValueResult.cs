@@ -61,6 +61,9 @@ public class ValueResult : IResult<Void, Error>
     public static implicit operator ValueResult(Error error)
         => new(default!, error, false);
 
+    public static implicit operator ValueResult(Exception exception)
+        => new(exception);
+
     public static implicit operator ValueResult<Void, Error>(ValueResult result)
         => new(result.Value, result.Error, result.IsOk);
 
